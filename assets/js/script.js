@@ -7,22 +7,30 @@ var currentDay = $('#currentDay');
 // hour is logged to compare tabs as past/present/future 
 // value can be replaced with interger for testing
 var currentHour = dayjs().format("H");
+// var currentHour= 12; // --- TEST VARIABLE ---
 console.log(currentHour);
 
 //displays current date and time within Header
 currentDay.text(dayjs().format("MMM D, h [:] mm"))
 
-// creates HTML section for each hour of the day
+// checks if each hour is past, present, future within for loop
 function timeIntervals(){
   timeSlots = 8; //8 hour work day
   for (var i = 0; i<timeSlots; i++){
-    
+    console.log("currentHour: "+ currentHour + "\nHour Checked: "+ (i+9));
+    if (currentHour < (i+9)){ // since hours in HTML start at 9am checking hour with i+9 for first hour
+      timeList.children('#hour-'+(i+9)).addClass('future');
+    } else if (currentHour == (i+9)){
+      timeList.children('#hour-'+(i+9)).addClass('present');
+    } else {
+      timeList.children('#hour-'+(i+9)).addClass('past');
+    }
   }
 }
 
-function createSlot(){
-  var divEl = document.createElement("div");
-  divEl.setAttribute()
+// saves and loads local storage for inputs
+function loadLocal(){
+
 }
 
 $(function () {
@@ -46,3 +54,4 @@ $(function () {
   // TODO: Add code to display the current date in the header of the page.
 });
 
+timeIntervals();
