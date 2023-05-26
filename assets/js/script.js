@@ -3,6 +3,7 @@
 // in the html.
 var timeList = $("#timeCard");
 var currentDay = $('#currentDay');
+var inputData = []; //an array of objects that display the hour ID as key and Input data as value
 
 // hour is logged to compare tabs as past/present/future 
 // value can be replaced with interger for testing
@@ -14,22 +15,26 @@ console.log(currentHour);
 currentDay.text(dayjs().format("MMM D, h [:] mm"))
 
 // checks if each hour is past, present, future within for loop
-function timeIntervals(){
+function timeIntervals() {
   timeSlots = 8; //8 hour work day
-  for (var i = 0; i<timeSlots; i++){
-    console.log("currentHour: "+ currentHour + "\nHour Checked: "+ (i+9));
-    if (currentHour < (i+9)){ // since hours in HTML start at 9am checking hour with i+9 for first hour
-      timeList.children('#hour-'+(i+9)).addClass('future');
-    } else if (currentHour == (i+9)){
-      timeList.children('#hour-'+(i+9)).addClass('present');
+  for (var i = 0; i < timeSlots; i++) {
+    console.log("currentHour: " + currentHour + "\nHour Checked: " + (i + 9));
+    if (currentHour < (i + 9)) { // since hours in HTML start at 9am checking hour with i+9 for first hour
+      timeList.children('#hour-' + (i + 9)).addClass('future');
+    } else if (currentHour == (i + 9)) {
+      timeList.children('#hour-' + (i + 9)).addClass('present');
     } else {
-      timeList.children('#hour-'+(i+9)).addClass('past');
+      timeList.children('#hour-' + (i + 9)).addClass('past');
     }
   }
 }
 
 // saves and loads local storage for inputs
-function loadLocal(){
+function saveLocal(event) {
+  // prevent button submition to refresh page
+  event.preventDefault();
+  var input = $("#input-9").trigger("submit");
+  console.log(input);
 
 }
 
@@ -55,3 +60,5 @@ $(function () {
 });
 
 timeIntervals();
+//whenever a button is clicked, save textarea locally
+$(":button").on("click", saveLocal);
