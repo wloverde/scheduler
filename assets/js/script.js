@@ -3,7 +3,8 @@
 // in the html.
 var timeList = $("#timeCard");
 var currentDay = $('#currentDay');
-var inputData = []; //an array of objects that display the hour ID as key and Input data as value
+var inputData = [
+]; //an array of objects that display the hour ID as key and Input data as value
 
 // hour is logged to compare tabs as past/present/future 
 // value can be replaced with interger for testing
@@ -33,8 +34,18 @@ function timeIntervals() {
 function saveLocal(event) {
   // prevent button submition to refresh page
   event.preventDefault();
-  var input = $("#input-9").trigger("submit");
   console.log(input);
+  var input = $('#input-9').trigger('submit');
+
+  // 'this' is relation to the button press element, and spliting the ID for <div> by '-' to aquire the hour num
+  var idHour = this.parentElement.id.split('-')[1];
+  // append number to back of 'input' id created in <textarea>
+  var inputStr = '#input-' + idHour;
+  // pull value from newly created string to match HTML ID in textarea elements
+  var hourInput = $(inputStr).val();
+  // save to local storage
+  console.log(idHour,hourInput);
+  localStorage.setItem(idHour, hourInput);
 
 }
 
