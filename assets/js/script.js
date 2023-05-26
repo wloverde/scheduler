@@ -3,29 +3,30 @@
 // in the html.
 var timeList = $("#timeCard");
 var currentDay = $('#currentDay');
-var inputData = [
-]; //an array of objects that display the hour ID as key and Input data as value
 
-// hour is logged to compare tabs as past/present/future 
+
 // value can be replaced with interger for testing
 var currentHour = dayjs().format("H");
 // var currentHour= 12; // --- TEST VARIABLE ---
-console.log(currentHour);
 
 //displays current date and time within Header
 currentDay.text(dayjs().format("MMM D, h [:] mm"))
 
 // checks if each hour is past, present, future within for loop
 function timeIntervals() {
-  timeSlots = 8; //8 hour work day
-  for (var i = 0; i < timeSlots; i++) {
-    console.log("currentHour: " + currentHour + "\nHour Checked: " + (i + 9));
-    if (currentHour < (i + 9)) { // since hours in HTML start at 9am checking hour with i+9 for first hour
-      timeList.children('#hour-' + (i + 9)).addClass('future');
-    } else if (currentHour == (i + 9)) {
-      timeList.children('#hour-' + (i + 9)).addClass('present');
+  timeSlots = 9; //8 hour work day has 9 1 hour time slots
+  for (var i = 9; i < timeSlots+9 ; i++) { // start at 9am checking hour with i representing the hour
+    console.log("currentHour: " + currentHour + "\nHour Checked: " + (i));
+    if (currentHour < i) { 
+      // add past, present, future class based of current time and pull local storage
+      timeList.children('#hour-' + i).addClass('future');
+      getLocal(i);
+    } else if (currentHour == i) {
+      timeList.children('#hour-' + i).addClass('present');
+      getLocal(i);
     } else {
-      timeList.children('#hour-' + (i + 9)).addClass('past');
+      timeList.children('#hour-' + i).addClass('past');
+      getLocal(i);
     }
   }
 }
@@ -34,9 +35,6 @@ function timeIntervals() {
 function saveLocal(event) {
   // prevent button submition to refresh page
   event.preventDefault();
-  console.log(input);
-  var input = $('#input-9').trigger('submit');
-
   // 'this' is relation to the button press element, and spliting the ID for <div> by '-' to aquire the hour num
   var idHour = this.parentElement.id.split('-')[1];
   // append number to back of 'input' id created in <textarea>
@@ -46,29 +44,16 @@ function saveLocal(event) {
   // save to local storage
   console.log(idHour,hourInput);
   localStorage.setItem(idHour, hourInput);
-
 }
 
-$(function () {
-  // TODO: Add a listener for click events on the save button. This code should
-  // use the id in the containing time-block as a key to save the user input in
-  // local storage. HINT: What does `this` reference in the click listener
-  // function? How can DOM traversal be used to get the "hour-x" id of the
-  // time-block containing the button that was clicked? How might the id be
-  // useful when saving the description in local storage?
-  //
-  // TODO: Add code to apply the past, present, or future class to each time
-  // block by comparing the id to the current hour. HINTS: How can the id
-  // attribute of each time-block be used to conditionally add or remove the
-  // past, present, and future classes? How can Day.js be used to get the
-  // current hour in 24-hour time?
-  //
-  // TODO: Add code to get any user input that was saved in localStorage and set
-  // the values of the corresponding textarea elements. HINT: How can the id
-  // attribute of each time-block be used to do this?
-  //
-  // TODO: Add code to display the current date in the header of the page.
-});
+//load local storage by the hour
+function getLocal(hour){
+  //pull value from local storage by hour
+  var hourValue=localStorage.getItem(hour);
+  var inputStr = "#input-" + hour;
+  $(inputStr).append(hourValue);
+
+}
 
 timeIntervals();
 //whenever a button is clicked, save textarea locally
